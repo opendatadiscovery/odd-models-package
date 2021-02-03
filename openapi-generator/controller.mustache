@@ -1,0 +1,33 @@
+import connexion
+import six
+
+{{#imports}}
+{{import}}  # noqa: E501
+{{/imports}}
+from controllers import {{classname}}
+from {{packageName}} import util
+{{#operations}}
+{{#operation}}
+
+
+def {{operationId}}({{#bodyParam}}{{#isBodyParam}}body, {{/isBodyParam}}{{/bodyParam}}{{#allParams}}{{^isBodyParam}}{{paramName}}{{^required}}=None{{/required}}{{^last}}, {{/last}}{{/isBodyParam}}{{/allParams}}):  # noqa: E501
+    """
+    HTTP method: {{httpMethod}}
+    path: {{path}}
+    {{#description}}
+    description: {{description}}
+    {{/description}}
+    {{^description}}
+    summary: {{summary}}
+    {{/description}}
+    params:
+        {{#allParams}}
+        {{paramName}}
+        {{/allParams}}
+    """
+
+    params = locals()
+    response = {{classname}}.{{operationId}}(params)
+    return response
+{{/operation}}
+{{/operations}}

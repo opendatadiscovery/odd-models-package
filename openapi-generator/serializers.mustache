@@ -1,0 +1,40 @@
+# coding: utf-8
+
+#from __future__ import absolute_import
+
+from marshmallow import (fields, EXCLUDE)
+
+from main import ma
+from models import models
+{{#models}}
+{{#model}}
+
+try:
+    from models import {{classname}} as db_model
+
+    class {{classname}}(ma.SQLAlchemyAutoSchema):
+        class Meta:
+            model = db_model
+            unknown = EXCLUDE
+            fields = ({{#vars}}'{{name}}',{{/vars}})
+
+        {{#vars}}
+        {{#complexType}}
+        {{name}} = fields.Nested('{{complexType}}'{{#isArray}}, many=True{{/isArray}})
+        {{/complexType}}
+        {{/vars}}
+
+except ImportError:
+
+    class {{classname}}(ma.SQLAlchemySchema):
+        class Meta:
+            unknown = EXCLUDE
+            fields = ({{#vars}}'{{name}}',{{/vars}})
+
+        {{#vars}}
+        {{#complexType}}
+        {{name}} = fields.Nested('{{complexType}}'{{#isArray}}, many=True{{/isArray}})
+        {{/complexType}}
+        {{/vars}}
+{{/model}}
+{{/models}}

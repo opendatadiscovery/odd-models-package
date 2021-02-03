@@ -1,0 +1,3 @@
+[submodule "opendatadiscovery-specification"]
+	path = opendatadiscovery-specification
+	url = https://github.com/provectus/opendatadiscovery-specification.git
