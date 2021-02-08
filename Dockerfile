@@ -11,9 +11,6 @@ RUN java -jar /provectus-openapi-generator/openapi-generator-cli.jar generate \
     --global-property=apiTests=false \
     --additional-properties=packageName=odd_contract
 
-RUN ls /generated
-RUN ls /generated/odd_contract
-
 FROM python:3.9.1
 
 ARG ODD_CONTRACT_VERSION
