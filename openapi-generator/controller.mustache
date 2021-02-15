@@ -28,8 +28,8 @@ def {{operationId}}({{#bodyParam}}{{#isBodyParam}}body, {{/isBodyParam}}{{/bodyP
 
     try:
         return {{classname}}.{{operationId}}(locals())
-    except AttributeError:
-        return "Method not found", 503
+    except ImportError:
+        return 'Method has not been implemented', 503
 
 {{/operation}}
 {{/operations}}
