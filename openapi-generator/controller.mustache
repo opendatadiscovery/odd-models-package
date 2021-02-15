@@ -26,8 +26,10 @@ def {{operationId}}({{#bodyParam}}{{#isBodyParam}}body, {{/isBodyParam}}{{/bodyP
         {{/allParams}}
     """
 
-    params = locals()
-    response = {{classname}}.{{operationId}}(params)
-    return response
+    try:
+        return {{classname}}.{{operationId}}(locals())
+    except AttributeError:
+        return "Method not found", 503
+
 {{/operation}}
 {{/operations}}
