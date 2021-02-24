@@ -17,7 +17,7 @@ classifiers = [
 ]
 
 setup(
-    name="odd_contract",
+    name="odd_contract_dev",
     version=version,
     author="Provectus",
     description="ODD Contract",
