@@ -30,6 +30,9 @@ jobs:
       - name: Checkout main
         uses: actions/checkout@v2
 
+      - name: Bump package version
+        run: bump2version --current-version $(cat VERSION) patch VERSION
+
       - name: Checkout submodules using a PAT
         run: |
           git config --file .gitmodules --get-regexp url | while read url; do
@@ -37,10 +40,8 @@ jobs:
           done
           git submodule sync
           git submodule update --init --recursive
+          git submodule foreach git pull origin main
           git checkout .gitmodules
-
-      - name: Bump package version
-        run: bump2version --current-version $(cat VERSION) patch VERSION
 
       - name: Generate ODD contract
         run: |
