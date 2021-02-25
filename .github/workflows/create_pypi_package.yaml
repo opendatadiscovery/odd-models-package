@@ -7,8 +7,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  publish_package:
-    name: Checkout repository and submodules
+  build_and_publish_package:
+    name: Build and publish the PyPi package
     runs-on: ubuntu-18.04
     steps:
       - name: Set up Python
@@ -45,7 +45,7 @@ jobs:
 
       - name: Generate ODD contract
         run: |
-          java -jar ./openapi-generator/openapi-generator-cli.jar generate \
+          java -jar ./openapi_generator/openapi-generator-cli.jar generate \
               -i ./opendatadiscovery-specification/specification/odd_adapter.yaml \
               -g python-flask \
               -o ./build/generated \
@@ -79,6 +79,6 @@ jobs:
           if [ -n "$(git status --porcelain)" ]
           then
             git add .
-            git commit -m "Bot: update submodule and version"
+            git commit -m "Bot: update submodule and VERSION"
             git push origin main
           fi

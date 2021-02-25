@@ -1,8 +1,8 @@
 FROM openjdk:11.0.4-jre-slim AS openapi_generator
 
 COPY ./opendatadiscovery-specification/specification /spec
-COPY ./openapi-generator/openapi-generator-cli.jar /provectus-openapi-generator/openapi-generator-cli.jar
-COPY ./openapi-generator/serializers.mustache ./openapi-generator/controller.mustache /templates/
+COPY ./openapi_generator/openapi-generator-cli.jar /provectus-openapi-generator/openapi-generator-cli.jar
+COPY ./openapi_generator/serializers.mustache ./openapi-generator/controller.mustache /templates/
 RUN java -jar /provectus-openapi-generator/openapi-generator-cli.jar generate \
     -i /spec/odd_adapter.yaml \
     -g python-flask \
