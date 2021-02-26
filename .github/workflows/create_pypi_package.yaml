@@ -49,7 +49,7 @@ jobs:
               -i ./opendatadiscovery-specification/specification/odd_adapter.yaml \
               -g python-flask \
               -o ./build/generated \
-              -t ./openapi-generator \
+              -t ./openapi_generator \
               --global-property=apiTests=false \
               --additional-properties=packageName=odd_contract
 
