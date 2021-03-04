@@ -56,8 +56,9 @@ jobs:
       - name: Assemble package's files
         run: |
           mkdir -p ./build/package/odd_contract
-          cp -r ./build/generated/odd_contract/* ./odd_contract/__init__.py ./build/package/odd_contract/
-          cp -r ./README.md ./setup.py ./build/package/
+          cp -r ./build/generated/odd_contract/* ./build/package/odd_contract/
+          cp ./odd_contract/__init__.py ./build/package/odd_contract/
+          cp ./README.md ./setup.py ./build/package/
 
       - name: Set ODD_CONTRACT_VERSION environment variable
         run: echo "ODD_CONTRACT_VERSION=$(cat VERSION)" >> $GITHUB_ENV
