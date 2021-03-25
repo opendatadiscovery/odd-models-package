@@ -1,14 +1,12 @@
-FROM openjdk:11.0.4-jre-slim AS openapi_generator
+FROM openapitools/openapi-generator:cli-v5.0.1 AS openapi_generator
 
 COPY ./opendatadiscovery-specification/specification /spec
-COPY ./openapi_generator/openapi-generator-cli.jar /provectus-openapi-generator/openapi-generator-cli.jar
-COPY ./openapi_generator/serializers.mustache ./openapi-generator/controller.mustache /templates/
-RUN java -jar /provectus-openapi-generator/openapi-generator-cli.jar generate \
+COPY ./openapi_generator/controller.mustache ./openapi_generator/__init__.mustache /templates/
+RUN java -jar openapi-generator-cli.jar generate \
     -i /spec/odd_adapter.yaml \
     -g python-flask \
     -o /generated \
     -t /templates \
-    --global-property=apiTests=false \
     --additional-properties=packageName=odd_contract
 
 FROM python:3.9.1

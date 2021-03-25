@@ -1,13 +1,56 @@
+from abc import ABC, abstractmethod
+
 import connexion
 import six
 
 {{#imports}}
 {{import}}  # noqa: E501
 {{/imports}}
-from controllers import {{classname}}
 from {{packageName}} import util
+
+
+class ODDController(ABC):
+    {{#operations}}
+    {{#operation}}
+
+    @abstractmethod
+    def {{operationId}}(self, {{#bodyParam}}{{#isBodyParam}}body, {{/isBodyParam}}{{/bodyParam}}{{#allParams}}{{^isBodyParam}}{{paramName}}{{^required}}=None{{/required}}{{^last}}, {{/last}}{{/isBodyParam}}{{/allParams}}):  # noqa: E501
+        """
+        HTTP method: {{httpMethod}}
+        path: {{path}}
+        {{#description}}
+        description: {{description}}
+        {{/description}}
+        {{^description}}
+        summary: {{summary}}
+        {{/description}}
+        params:
+            {{#allParams}}
+            {{paramName}}
+            {{/allParams}}
+        """
+        raise NotImplementedError
+
+    {{/operation}}
+    {{/operations}}
+
 {{#operations}}
 {{#operation}}
+
+
+class ControllerHolder:
+    __controller: ODDController = None
+
+    @classmethod
+    def init_controller(cls, controller: ODDController):
+        cls.__controller = controller
+
+    @classmethod
+    def get_controller(cls) -> ODDController:
+        if cls.__controller is None:
+            raise RuntimeError('ODD controller has never been initialized')
+
+        return cls.__controller
 
 
 def {{operationId}}({{#bodyParam}}{{#isBodyParam}}body, {{/isBodyParam}}{{/bodyParam}}{{#allParams}}{{^isBodyParam}}{{paramName}}{{^required}}=None{{/required}}{{^last}}, {{/last}}{{/isBodyParam}}{{/allParams}}):  # noqa: E501
@@ -27,8 +70,8 @@ def {{operationId}}({{#bodyParam}}{{#isBodyParam}}body, {{/isBodyParam}}{{/bodyP
     """
 
     try:
-        return {{classname}}.{{operationId}}(locals())
-    except ImportError:
+        return ControllerHolder.get_controller().{{operationId}}(locals())
+    except NotImplementedError:
         return 'Method has not been implemented', 503
 
 {{/operation}}
