@@ -9,6 +9,11 @@ RUN java -jar openapi-generator-cli.jar generate \
     -t /templates \
     --additional-properties=packageName=odd_contract
 
+FROM python:3.9.1 as pydantic_generator
+COPY ./opendatadiscovery-specification/specification /spec
+RUN pip3 install datamodel-code-generator && mkdir generated
+RUN datamodel-codegen --input /spec/entities.yaml --output generated/models.py --input-file-type openapi
+
 FROM python:3.9.1
 
 ARG ODD_CONTRACT_VERSION
@@ -22,6 +27,8 @@ ENV TWINE_PASSWORD=$TWINE_PASSWORD
 
 WORKDIR package
 COPY --from=openapi_generator  /generated/odd_contract odd_contract
+RUN rm -r odd_contract/models
+COPY --from=pydantic_generator /generated/models.py odd_contract/models.py
 COPY odd_contract/__init__.py odd_contract
 COPY setup.py README.md ./
 

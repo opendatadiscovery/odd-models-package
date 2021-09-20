@@ -1,20 +1,20 @@
 from abc import ABC, abstractmethod
+from typing import Optional, Union, Tuple
+from datetime import datetime
 
 import connexion
+from pydantic import BaseModel
+from flask import Response
 import six
 
-{{#imports}}
-{{import}}  # noqa: E501
-{{/imports}}
-from {{packageName}} import util
-
+from odd_contract import models
 
 class ODDController(ABC):
     {{#operations}}
     {{#operation}}
 
     @abstractmethod
-    def {{operationId}}(self, {{#bodyParam}}{{#isBodyParam}}body, {{/isBodyParam}}{{/bodyParam}}{{#allParams}}{{^isBodyParam}}{{paramName}}{{^required}}=None{{/required}}{{^last}}, {{/last}}{{/isBodyParam}}{{/allParams}}):  # noqa: E501
+    def {{operationId}}(self, {{#bodyParam}}{{#isBodyParam}}body, {{/isBodyParam}}{{/bodyParam}}{{#allParams}}{{^isBodyParam}}{{paramName}}{{^required}}=None{{/required}}{{^last}}, {{/last}}{{/isBodyParam}}{{/allParams}}) -> {{#returnType}}Optional[Tuple[models.{{.}}, datetime]]{{/returnType}}{{^returnType}}None{{/returnType}}:  # noqa: E501
         """
         HTTP method: {{httpMethod}}
         path: {{path}}
@@ -70,7 +70,18 @@ def {{operationId}}({{#bodyParam}}{{#isBodyParam}}body, {{/isBodyParam}}{{/bodyP
     """
 
     try:
-        return ControllerHolder.get_controller().{{operationId}}(locals())
+        result = ControllerHolder.get_controller().{{operationId}}(locals())
+        if result is None:
+            return Response(status=503, headers={'Retry-After': 30})
+        elif not isinstance(result[0], BaseModel):
+            return 'Internal server error, return type mismatch', 503
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Last-Modified': result[1],
+        }
+        response = result[0]
+        return Response(response=response.json(exclude_none=True), status=200, headers=headers)
     except NotImplementedError:
         return 'Method has not been implemented', 503
 

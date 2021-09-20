@@ -7,7 +7,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 requires = [
-    'connexion==2.7.0'
+    'connexion==2.7.0',
+    'pydantic==1.8.2'
 ]
 
 classifiers = [

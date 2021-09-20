@@ -1,7 +1,8 @@
-import connexion
+import os
 
+import connexion
+from flask import Response
 # Pieces of generated code
-from .encoder import JSONEncoder
 from odd_contract.controllers import ODDController, ControllerHolder
 
 
@@ -12,7 +13,7 @@ def init_flask_app():
                 pythonic_params=True)
 
     app = app.app
-    app.json_encoder = JSONEncoder
+    app.add_url_rule(os.environ.get('HEALTHCHECK_PATH', '/health'), "healthcheck", lambda: Response(status=200))
     return app
 
 
