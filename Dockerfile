@@ -1,7 +1,7 @@
 FROM openapitools/openapi-generator:cli-v5.0.1 AS openapi_generator
 
 COPY ./opendatadiscovery-specification/specification /spec
-COPY ./openapi_generator/controller.mustache ./openapi_generator/__init__.mustache ./openapi_generator/encoder.mustache /templates/
+COPY ./openapi_generator/controller.mustache ./openapi_generator/__init__.mustache /templates/
 RUN java -jar openapi-generator-cli.jar generate \
     -i /spec/odd_adapter.yaml \
     -g python-flask \
