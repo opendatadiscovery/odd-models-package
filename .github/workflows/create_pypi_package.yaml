@@ -32,7 +32,7 @@ jobs:
             tomologic/bumpversion --current-version $(cat VERSION) patch VERSION
           echo "ODD_CONTRACT_VERSION=$(cat VERSION)" >> $GITHUB_ENV
 
-      - name: Run docker build
+      - name: Run Dockerfile to build and publish package into PyPI
         run: |
           docker build . -t ignored \
             --build-arg ODD_CONTRACT_VERSION=${{ env.ODD_CONTRACT_VERSION }} \
