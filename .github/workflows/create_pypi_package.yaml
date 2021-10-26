@@ -13,6 +13,9 @@ jobs:
     steps:
       - name: Checkout main
         uses: actions/checkout@v2
+        
+      - name: test
+        run: docker info
 
       - name: Bump package version
         run: bump2version --current-version $(cat VERSION) patch VERSION
