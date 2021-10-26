@@ -13,12 +13,6 @@ jobs:
     steps:
       - name: Checkout main
         uses: actions/checkout@v2
-        
-      - name: test
-        run: docker info
-
-      - name: Bump package version
-        run: bump2version --current-version $(cat VERSION) patch VERSION
 
       - name: Checkout submodules using a PAT
         run: |
@@ -29,9 +23,14 @@ jobs:
           git submodule update --init --recursive
           git submodule foreach git pull origin main
           git checkout .gitmodules
-
-      - name: Set ODD_CONTRACT_VERSION environment variable
-        run: echo "ODD_CONTRACT_VERSION=$(cat VERSION)" >> $GITHUB_ENV
+      
+      - name: Bump package version
+        run: |
+          docker run --rm \
+            -v $PWD:/src \
+            -w /src \
+            tomologic/bumpversion --current-version $(cat VERSION) patch VERSION
+          echo "ODD_CONTRACT_VERSION=$(cat VERSION)" >> $GITHUB_ENV
 
       - name: Run docker build
         run: |
