@@ -11,22 +11,6 @@ jobs:
     name: Build and publish the PyPi package
     runs-on: ubuntu-18.04
     steps:
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Set up Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.13
-
-      # TODO: cache
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install setuptools wheel twine bump2version
-
       - name: Checkout main
         uses: actions/checkout@v2
 
@@ -43,35 +27,15 @@ jobs:
           git submodule foreach git pull origin main
           git checkout .gitmodules
 
-      - name: Generate ODD contract
-        run: |
-          java -jar ./openapi_generator/openapi-generator-cli.jar generate \
-              -i ./opendatadiscovery-specification/specification/odd_adapter.yaml \
-              -g python-flask \
-              -o ./build/generated \
-              -t ./openapi_generator \
-              --global-property=apiTests=false \
-              --additional-properties=packageName=odd_contract
-
-      - name: Assemble package's files
-        run: |
-          mkdir -p ./build/package/odd_contract
-          cp -r ./build/generated/odd_contract/* ./build/package/odd_contract/
-          cp ./odd_contract/__init__.py ./build/package/odd_contract/
-          cp ./README.md ./setup.py ./build/package/
-
       - name: Set ODD_CONTRACT_VERSION environment variable
         run: echo "ODD_CONTRACT_VERSION=$(cat VERSION)" >> $GITHUB_ENV
 
-      - name: Build and publish
-        env:
-          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-          ODD_CONTRACT_VERSION: ${{ env.ODD_CONTRACT_VERSION }}
+      - name: Run docker build
         run: |
-          cd ./build/package
-          python setup.py sdist bdist_wheel
-          twine upload --repository testpypi dist/*
+          docker build . -t ignored \
+            --build-arg ODD_CONTRACT_VERSION=${{ env.ODD_CONTRACT_VERSION }} \
+            --build-arg TWINE_USERNAME=${{ secrets.PYPI_USERNAME }} \
+            --build-arg TWINE_PASSWORD=${{ secrets.PYPI_PASSWORD }} 
 
       - name: Update repository with up-to-date submodules and version
         run: |
@@ -80,6 +44,6 @@ jobs:
           if [ -n "$(git status --porcelain)" ]
           then
             git add .
-            git commit -m "Bot: update submodule and VERSION"
+            git commit -m "Update submodule branch ref and bump package version"
             git push origin main
           fi
