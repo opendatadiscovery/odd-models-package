@@ -30,12 +30,12 @@ jobs:
             -v $PWD:/src \
             -w /src \
             tomologic/bumpversion --current-version $(cat VERSION) patch VERSION
-          echo "ODD_CONTRACT_VERSION=$(cat VERSION)" >> $GITHUB_ENV
+          echo "ODD_MODELS_VERSION=$(cat VERSION)" >> $GITHUB_ENV
 
       - name: Run Dockerfile to build and publish package into PyPI
         run: |
           docker build . -t ignored \
-            --build-arg ODD_CONTRACT_VERSION=${{ env.ODD_CONTRACT_VERSION }} \
+            --build-arg ODD_MODELS_VERSION=${{ env.ODD_MODELS_VERSION }} \
             --build-arg TWINE_USERNAME=${{ secrets.PYPI_USERNAME }} \
             --build-arg TWINE_PASSWORD=${{ secrets.PYPI_PASSWORD }} 
 

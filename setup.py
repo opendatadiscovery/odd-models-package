@@ -1,14 +1,15 @@
 from setuptools import setup, find_packages
 import os
 
-version = os.environ['ODD_CONTRACT_VERSION']
+version = os.environ['ODD_MODELS_VERSION']
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 requires = [
     'connexion==2.7.0',
-    'pydantic==1.8.2'
+    'pydantic==1.8.2',
+    'flask-compress==1.10.1'
 ]
 
 classifiers = [
@@ -18,10 +19,11 @@ classifiers = [
 ]
 
 setup(
-    name="odd_contract_dev",
+    name="odd-models",
     version=version,
-    author="Provectus",
-    description="ODD Contract",
+    author="Open Data Discovery",
+    author_email="pypi@opendatadiscovery.org",
+    description="Open Data Discovery Models",
     license="Apache License 2.0",
     long_description=long_description,
     long_description_content_type="text/markdown",

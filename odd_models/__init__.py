@@ -2,8 +2,9 @@ import os
 
 import connexion
 from flask import Response
+from flask_compress import Compress
 # Pieces of generated code
-from odd_contract.controllers import ODDController, ControllerHolder
+from odd_models.controllers import ODDController, ControllerHolder
 
 
 def init_flask_app():
@@ -14,6 +15,7 @@ def init_flask_app():
 
     app = app.app
     app.add_url_rule(os.environ.get('HEALTHCHECK_PATH', '/health'), "healthcheck", lambda: Response(status=200))
+    Compress().init_app(app)
     return app
 
 
