@@ -147,6 +147,6 @@ Thumbs.db
 .settings
 .classpath
 
-odd_contract/*
-!odd_contract/__init__.py
+odd_models/*
+!odd_models/__init__.py
 
