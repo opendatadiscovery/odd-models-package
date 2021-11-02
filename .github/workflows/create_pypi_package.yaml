@@ -1,9 +1,6 @@
-name: create_pypi_package
+name: Build and publish PyPI artifact
 
 on:
-  push:
-    branches: [ main ]
-
   workflow_dispatch:
 
 jobs:
@@ -24,6 +21,12 @@ jobs:
           git submodule foreach git pull origin main
           git checkout .gitmodules
       
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+
+      - name: Patch package version
+        run: poetry version patch
+
       - name: Run Dockerfile to build and publish package into PyPI
         run: |
           docker build . -t ignored \

@@ -58,7 +58,7 @@ COPY api_client/__init__.py odd_models/
 COPY --from=pydantic_generator /generated/models.py odd_models/models.py
 
 # copying package information
-COPY ./openapi_generator/pyproject.toml ./openapi_generator/README.md ./
+COPY ./pyproject.toml ./openapi_generator/README.md ./
 
 # installing poetry
 ENV POETRY_PATH=/opt/poetry POETRY_VERSION=1.1.6
@@ -70,9 +70,11 @@ RUN curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poet
 RUN mv /root/.poetry $POETRY_PATH
 
 # publishing package
-RUN poetry version patch
 RUN poetry build
-# for testpypi
-#RUN poetry config repositories.testpypi https://test.pypi.org/legacy/
-#RUN poetry publish --repository testpypi --username $PYPI_USERNAME --password $PYPI_PASSWORD
+
+# for test PyPI index (local development)
+# RUN poetry config repositories.testpypi https://test.pypi.org/legacy/
+# RUN poetry publish --repository testpypi --username $PYPI_USERNAME --password $PYPI_PASSWORD
+
+# for real PyPI index
 RUN poetry publish --username $PYPI_USERNAME --password $PYPI_PASSWORD
