@@ -1,9 +1,6 @@
-name: create_pypi_package
+name: Build and publish PyPI artifact
 
 on:
-  push:
-    branches: [ main ]
-
   workflow_dispatch:
 
 jobs:
@@ -24,20 +21,17 @@ jobs:
           git submodule foreach git pull origin main
           git checkout .gitmodules
       
-      - name: Bump package version
-        run: |
-          docker run --rm \
-            -v $PWD:/src \
-            -w /src \
-            tomologic/bumpversion --current-version $(cat VERSION) patch VERSION
-          echo "ODD_MODELS_VERSION=$(cat VERSION)" >> $GITHUB_ENV
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+
+      - name: Patch package version
+        run: poetry version patch
 
       - name: Run Dockerfile to build and publish package into PyPI
         run: |
           docker build . -t ignored \
-            --build-arg ODD_MODELS_VERSION=${{ env.ODD_MODELS_VERSION }} \
-            --build-arg TWINE_USERNAME=${{ secrets.PYPI_USERNAME }} \
-            --build-arg TWINE_PASSWORD=${{ secrets.PYPI_PASSWORD }} 
+            --build-arg PYPI_USERNAME=${{ secrets.PYPI_USERNAME }} \
+            --build-arg PYPI_PASSWORD=${{ secrets.PYPI_PASSWORD }}
 
       - name: Update repository with up-to-date submodules and version
         run: |

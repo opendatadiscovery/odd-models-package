@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "odd-models"
+version = "1.0.1"
+description = "Open Data Discovery Models"
+authors = ["Open Data Discovery <pypi@opendatadiscovery.org>"]
+license = "Apache-2.0"
+readme = "README.md"
+homepage = "https://github.com/opendatadiscovery/odd-models-packager"
+repository = "https://github.com/opendatadiscovery/odd-models-package"
+keywords = ["odd-models", "odd_models", "opendatadiscovery"]
+include = ["LICENSE"]
+
+
+[tool.poetry.dependencies]
+python = "^3.6"
+connexion = "2.7.0"
+pydantic = "1.8.2"
+Flask-Compress = "1.10.1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
