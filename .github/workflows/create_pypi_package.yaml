@@ -6,7 +6,7 @@ on:
 jobs:
   build_and_publish_package:
     name: Build and publish the PyPi package
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout main
         uses: actions/checkout@v2
