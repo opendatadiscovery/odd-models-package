@@ -5,7 +5,7 @@ from typing import Optional, Dict, Any, Type
 from pydantic import BaseModel
 from requests import Response, Session
 
-API_TIMEOUT = 30
+DEFAULT_API_TIMEOUT = 30
 
 
 def validate_schema(schema: Type[BaseModel]):
@@ -42,7 +42,7 @@ class HttpClient:
             'json': json,
             'allow_redirects': False,
             'headers': headers or {},
-            'timeout': timeout or API_TIMEOUT,
+            'timeout': timeout or DEFAULT_API_TIMEOUT,
         }
         try:
             session = Session()
