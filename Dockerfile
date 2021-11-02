@@ -33,11 +33,11 @@ FROM python:3.9.1
 ARG ODD_MODELS_VERSION
 ENV ODD_MODELS_VERSION=$ODD_MODELS_VERSION
 
-ARG TWINE_USERNAME
-ENV TWINE_USERNAME=$TWINE_USERNAME
+ARG PYPI_USERNAME
+ENV PYPI_USERNAME=$PYPI_USERNAME
 
-ARG TWINE_PASSWORD
-ENV TWINE_PASSWORD=$TWINE_PASSWORD
+ARG PYPI_PASSWORD
+ENV PYPI_PASSWORD=$PYPI_PASSWORD
 
 # collecting a package
 WORKDIR package
@@ -58,10 +58,21 @@ COPY api_client/__init__.py odd_models/
 COPY --from=pydantic_generator /generated/models.py odd_models/models.py
 
 # copying package information
-COPY ./openapi_generator/setup.py ./openapi_generator/README.md ./
+COPY ./openapi_generator/pyproject.toml ./openapi_generator/README.md ./
 
-# publishing the package to pypi
-RUN pip install --user --upgrade twine && \
-    python setup.py sdist bdist_wheel && \
-    python -m twine upload dist/*
+# installing poetry
+ENV POETRY_PATH=/opt/poetry POETRY_VERSION=1.1.6
+ENV PATH="$POETRY_PATH/bin:$VENV_PATH/bin:$PATH"
 
+RUN apt-get update && \
+    apt-get install -y -q build-essential curl
+RUN curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+RUN mv /root/.poetry $POETRY_PATH
+
+# publishing package
+RUN poetry version patch
+RUN poetry build
+# for testpypi
+#RUN poetry config repositories.testpypi https://test.pypi.org/legacy/
+#RUN poetry publish --repository testpypi --username $PYPI_USERNAME --password $PYPI_PASSWORD
+RUN poetry publish --username $PYPI_USERNAME --password $PYPI_PASSWORD
