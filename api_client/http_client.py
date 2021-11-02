@@ -13,9 +13,10 @@ def validate_schema(schema: Type[BaseModel]):
         @wraps(func)
         def wrapper(self_, req_data, *args, **kwargs):
             if isinstance(req_data, dict):
-                schema.parse_obj(req_data)
+                obj = schema.parse_obj(req_data)
+                req_data = obj.json(exclude_none=True)
             elif isinstance(req_data, schema):
-                req_data = req_data.json()
+                req_data = req_data.json(exclude_none=True)
             else:
                 raise ValueError(f"'data' argument must be dict or instance of model {schema}")
             return func(self_, req_data, *args, **kwargs)
