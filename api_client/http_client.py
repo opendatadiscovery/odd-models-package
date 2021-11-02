@@ -1,3 +1,4 @@
+import json
 import logging
 from functools import wraps
 from typing import Optional, Dict, Any, Type
@@ -11,15 +12,16 @@ DEFAULT_API_TIMEOUT = 30
 def validate_schema(schema: Type[BaseModel]):
     def decorator(func):
         @wraps(func)
-        def wrapper(self_, req_data, *args, **kwargs):
+        def wrapper(*args, **kwargs):
+            req_data = kwargs.pop('data', None) or args[1]
             if isinstance(req_data, dict):
                 obj = schema.parse_obj(req_data)
-                req_data = obj.json(exclude_none=True)
+                req_data = json.loads(obj.json(exclude_none=True))
             elif isinstance(req_data, schema):
-                req_data = req_data.json(exclude_none=True)
+                req_data = json.loads(req_data.json(exclude_none=True))
             else:
                 raise ValueError(f"'data' argument must be dict or instance of model {schema}")
-            return func(self_, req_data, *args, **kwargs)
+            return func(args[0], req_data, **kwargs)
         return wrapper
     return decorator
 
