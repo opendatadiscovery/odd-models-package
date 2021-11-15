@@ -44,21 +44,21 @@ WORKDIR package
 
 # copying necessary files for adapter to package folder
 COPY --from=openapi_generator  /generated/odd_models/adapter odd_models/adapter
-COPY adapter/__init__.py odd_models/adapter
+COPY odd_models_src/adapter/__init__.py odd_models/adapter
 
 # removing models folder (because we are using pydantic models)
 RUN rm -r odd_models/adapter/models
 
 # copying necessary files for api client to package folder
 COPY --from=openapi_generator  /generated/odd_models/api_client/api odd_models/api_client
-COPY api_client/http_client.py odd_models/api_client
-COPY api_client/__init__.py odd_models/
+COPY odd_models_src/api_client/http_client.py odd_models/api_client
 
 # copying generated pydantic models
 COPY --from=pydantic_generator /generated/models.py odd_models/models.py
 
-# copying package information
-COPY ./pyproject.toml ./openapi_generator/README.md ./
+# copying another package files
+COPY ./pyproject.toml ./odd_models_src/README.md ./
+COPY ./odd_models_src/__init__.py ./odd_models_src/utils.py odd_models/
 
 # installing poetry
 ENV POETRY_PATH=/opt/poetry POETRY_VERSION=1.1.6
