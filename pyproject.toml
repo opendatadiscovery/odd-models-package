@@ -16,6 +16,7 @@ python = "^3.6"
 connexion = "2.7.0"
 pydantic = "1.8.2"
 Flask-Compress = "1.10.1"
+sqlparse = "0.4.2"
 
 [tool.poetry.dev-dependencies]
 
