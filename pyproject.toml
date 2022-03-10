@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "odd-models"
-version = "1.0.18"
+version = "1.0.19"
 description = "Open Data Discovery Models"
 authors = ["Open Data Discovery <pypi@opendatadiscovery.org>"]
 license = "Apache-2.0"
