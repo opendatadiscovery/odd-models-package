@@ -12,8 +12,8 @@ include = ["LICENSE"]
 
 
 [tool.poetry.dependencies]
-python = "^3.6"
-connexion = "2.7.0"
+python = "^3.6.1"
+connexion = "2.13.1"
 pydantic = "1.8.2"
 Flask-Compress = "1.10.1"
 sqlparse = "0.4.2"
