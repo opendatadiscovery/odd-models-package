@@ -1,3 +1,5 @@
+[![PyPI version](https://badge.fury.io/py/odd-models.svg)](https://badge.fury.io/py/odd-models)
+
 # ODD models package
 
 ```
