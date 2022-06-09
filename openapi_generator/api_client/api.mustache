@@ -1,0 +1,48 @@
+from typing import Optional, Dict, Union
+
+from odd_models import models
+from odd_models.api_client.http_client import HttpClient, validate_schema
+from pydantic import BaseModel
+
+
+class ODDApiClient(HttpClient):
+    base_url = None
+
+    def __init__(self, base_url: str) -> None:
+        self.base_url = base_url.rstrip('/')
+
+{{#operations}}
+{{#operation}}
+{{#bodyAllowed}}
+    @validate_schema(models.{{#bodyParams}}{{{baseName}}}{{/bodyParams}})
+{{/bodyAllowed}}
+    def {{operationId}}(
+            self,
+{{#queryParams}}
+            {{paramName}}{{^required}}=None{{/required}},
+{{/queryParams}}
+{{#bodyAllowed}}
+            data: Union[dict, BaseModel],
+{{/bodyAllowed}}
+            headers: Optional[Dict] = None,
+            timeout: Optional[int] = None,
+    ):
+        request_data = {
+            'path': '{{path}}',
+{{#hasQueryParams}}
+            'params': {
+{{#queryParams}}
+                '{{paramName}}': {{paramName}},
+{{/queryParams}}
+            },
+{{/hasQueryParams}}
+{{#bodyAllowed}}
+            'data': data,
+{{/bodyAllowed}}
+            'headers': headers,
+            'timeout': timeout,
+        }
+        return self.{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}(**request_data)
+
+{{/operation}}
+{{/operations}}

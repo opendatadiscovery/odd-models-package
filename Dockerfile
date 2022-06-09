@@ -1,4 +1,14 @@
 # generating pydantic models
+FROM openapitools/openapi-generator:cli-v5.0.1 AS openapi_generator
+COPY ./opendatadiscovery-specification/specification /spec
+COPY ./openapi_generator/api_client/api.mustache ./openapi_generator/api_client/__init__api.mustache /templates/api_client/
+RUN java -jar openapi-generator-cli.jar generate \
+    -i /spec/odd_api.yaml \
+    -g python \
+    -o /generated \
+    -t /templates/api_client \
+    --additional-properties=packageName=odd_models.api_client
+
 FROM python:3.9.1 as pydantic_generator
 COPY ./opendatadiscovery-specification/specification /spec
 RUN pip install datamodel-code-generator && mkdir generated
@@ -21,6 +31,10 @@ WORKDIR package
 
 # copying generated pydantic models
 COPY --from=pydantic_generator /generated/models.py odd_models/models.py
+
+# copying necessary files for api client to package folder
+COPY --from=openapi_generator  /generated/odd_models/api_client/api odd_models/api_client
+COPY odd_models_src/api_client/http_client.py odd_models/api_client
 
 # copying another package files
 COPY ./pyproject.toml ./odd_models_src/README.md ./
