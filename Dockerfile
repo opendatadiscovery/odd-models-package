@@ -57,4 +57,4 @@ RUN poetry build
 # RUN poetry publish --repository testpypi --username $PYPI_USERNAME --password $PYPI_PASSWORD
 
 # for real PyPI index
-# RUN poetry publish --username $PYPI_USERNAME --password $PYPI_PASSWORD
+RUN poetry publish --username $PYPI_USERNAME --password $PYPI_PASSWORD
