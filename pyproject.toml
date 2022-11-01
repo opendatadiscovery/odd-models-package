@@ -5,17 +5,18 @@ description = "Open Data Discovery Models"
 authors = ["Open Data Discovery <pypi@opendatadiscovery.org>"]
 license = "Apache-2.0"
 readme = "README.md"
-homepage = "https://github.com/opendatadiscovery/odd-models-packager"
+homepage = "https://github.com/opendatadiscovery/odd-models-package"
 repository = "https://github.com/opendatadiscovery/odd-models-package"
 keywords = ["odd-models", "odd_models", "opendatadiscovery"]
 include = ["LICENSE"]
 
 
 [tool.poetry.dependencies]
-python = "^3.6.1"
+python = "^3.8.12"
 pydantic = "1.8.2"
 sqlparse = "0.4.2"
 requests = "2.27.1"
+sql-metadata = "^2.6.0"
 
 [tool.poetry.dev-dependencies]
 
