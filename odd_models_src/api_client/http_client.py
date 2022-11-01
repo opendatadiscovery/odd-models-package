@@ -1,7 +1,7 @@
 import json
 import logging
 from functools import wraps
-from typing import Optional, Dict, Any, Type
+from typing import Any, Dict, Optional, Type
 
 from pydantic import BaseModel
 from requests import Response, Session

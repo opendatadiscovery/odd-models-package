@@ -1,24 +1,27 @@
 import sqlparse
-from sqlparse.sql import T, TokenList, Parenthesis, Identifier, IdentifierList
+from sqlparse.sql import Identifier, IdentifierList, Parenthesis, T, TokenList
 from sqlparse.tokens import Punctuation
 
 
 def _is_in_table(token):
-    return _match_on(token, [
-        'FROM',
-        'INNER JOIN',
-        'JOIN',
-        'FULL JOIN',
-        'FULL OUTER JOIN',
-        'LEFT JOIN',
-        'LEFT OUTER JOIN',
-        'RIGHT JOIN',
-        'RIGHT OUTER JOIN'
-    ])
+    return _match_on(
+        token,
+        [
+            "FROM",
+            "INNER JOIN",
+            "JOIN",
+            "FULL JOIN",
+            "FULL OUTER JOIN",
+            "LEFT JOIN",
+            "LEFT OUTER JOIN",
+            "RIGHT JOIN",
+            "RIGHT OUTER JOIN",
+        ],
+    )
 
 
 def _is_out_table(token):
-    return _match_on(token, ['INTO', 'TO'])
+    return _match_on(token, ["INTO", "TO"])
 
 
 def _match_on(token, keywords):
@@ -39,13 +42,13 @@ class SqlParser:
             table_name = next(token_list).value
             try:
                 dot = next(token_list)
-                if dot.match(Punctuation, '.'):
+                if dot.match(Punctuation, "."):
                     table_name += dot.value
                     table_name += next(token_list).value
                 else:
-                    table_name = f'{table_name}'
+                    table_name = f"{table_name}"
             except StopIteration:
-                table_name = f'{table_name}'
+                table_name = f"{table_name}"
             return table_name
 
         self._idx, token = tokens.token_next(idx=self._idx)
@@ -54,7 +57,7 @@ class SqlParser:
             gidx = 0
             tables.append(parse_ident(token.token_first(skip_ws=True, skip_cm=True)))
             gidx, punc = token.token_next(gidx, skip_ws=True, skip_cm=True)
-            while punc and punc.value == ',':
+            while punc and punc.value == ",":
                 gidx, name = token.token_next(gidx, skip_ws=True, skip_cm=True)
                 tables.append(parse_ident(name))
                 gidx, punc = token.token_next(gidx)
@@ -64,7 +67,7 @@ class SqlParser:
         return tables
 
     def is_cte(self, token: T):
-        return token.match(T.Keyword.CTE, values=['WITH'])
+        return token.match(T.Keyword.CTE, values=["WITH"])
 
     def get_response(self):
         self.get_tokens()
@@ -94,7 +97,7 @@ class SqlParser:
         gidx, group = tokens.token_next(self._idx, skip_ws=True, skip_cm=True)
 
         # handle recursive keyword
-        if group.match(T.Keyword, values=['RECURSIVE']):
+        if group.match(T.Keyword, values=["RECURSIVE"]):
             gidx, group = tokens.token_next(gidx, skip_ws=True, skip_cm=True)
 
         if not group.is_group:
@@ -107,7 +110,7 @@ class SqlParser:
 
         # AS keyword
         offset, as_keyword = group.token_next(offset, skip_ws=True, skip_cm=True)
-        if not as_keyword.match(T.Keyword, values=['AS']):
+        if not as_keyword.match(T.Keyword, values=["AS"]):
             raise RuntimeError(f"CTE does not have AS keyword at index {gidx}")
 
         offset, parens = group.token_next(offset, skip_ws=True, skip_cm=True)
