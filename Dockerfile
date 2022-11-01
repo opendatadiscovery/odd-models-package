@@ -38,7 +38,7 @@ COPY odd_models_src/api_client/http_client.py odd_models/api_client
 
 # copying another package files
 COPY ./pyproject.toml ./odd_models_src/README.md ./
-COPY ./odd_models_src/__init__.py ./odd_models_src/utils.py odd_models/
+COPY ./odd_models_src/__init__.py ./odd_models_src/utils.py ./odd_models_src/sql_parser.py odd_models/
 
 # installing poetry
 ENV POETRY_PATH=/opt/poetry POETRY_VERSION=1.1.6
