@@ -5,41 +5,46 @@ from typing import List, Dict, Any
 
 
 class OddIntegrator:
-    def __init__(self, odd_platform_url: str, odd_collector_token: str
-                 ):
+    def __init__(self, odd_platform_url: str, odd_collector_token: str):
         self.odd_collector_token = odd_collector_token
         self.platform_client = ODDApiClient(base_url=odd_platform_url)
 
-    source_name = 'internal_host'
-    service_name = 'internal_service'
+    source_name = "internal_host"
+    service_name = "internal_service"
 
     @property
     def source_oddrn(self) -> str:
         return f"//{self.service_name}/{self.source_name}"
 
     def register_source(self) -> int:
-        reg_source_data = {"items": [{"oddrn": self.source_oddrn, "name": self.source_name,
-                                      "description": None}]}
+        reg_source_data = {
+            "items": [
+                {
+                    "oddrn": self.source_oddrn,
+                    "name": self.source_name,
+                    "description": None,
+                }
+            ]
+        }
         reg_headers = {
             "content-type": "application/json",
             "Authorization": f"Bearer {self.odd_collector_token}",
         }
 
-        resp: Response = self.platform_client.create_data_source(data=reg_source_data,
-                                                                 headers=reg_headers)
+        resp: Response = self.platform_client.create_data_source(
+            data=reg_source_data, headers=reg_headers
+        )
         return resp.status_code
 
     @staticmethod
-    def create_metadata_extension_list(metadata: Dict[str, Any],
-                                       schema_url: str = "https://raw.githubusercontent.com/opendatadiscovery/"
-
-                                       ) -> List[MetadataExtension]:
+    def create_metadata_extension_list(
+        metadata: Dict[str, Any],
+        schema_url: str = "https://raw.githubusercontent.com/opendatadiscovery/",
+    ) -> List[MetadataExtension]:
         return [
             MetadataExtension(
                 schema_url=schema_url,
-                metadata={
-                    key: value for key, value in metadata.items()
-                },
+                metadata={key: value for key, value in metadata.items()},
             )
         ]
 
