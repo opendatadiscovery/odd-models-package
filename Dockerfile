@@ -41,13 +41,13 @@ COPY ./pyproject.toml ./odd_models_src/README.md ./
 COPY ./odd_models_src/__init__.py ./odd_models_src/utils.py ./odd_models_src/sql_parser.py odd_models/
 
 # installing poetry
-ENV POETRY_PATH=/opt/poetry POETRY_VERSION=1.1.6
-ENV PATH="$POETRY_PATH/bin:$VENV_PATH/bin:$PATH"
+ENV POETRY_HOME=/etc/poetry \
+    POETRY_VERSION=1.3.1
+ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
 
 RUN apt-get update && \
     apt-get install -y -q build-essential curl
-RUN curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
-RUN mv /root/.poetry $POETRY_PATH
+RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=${POETRY_HOME} python3 -
 
 # publishing package
 RUN poetry build
