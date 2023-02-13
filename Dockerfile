@@ -44,13 +44,11 @@ COPY ./odd_models_src/__init__.py ./odd_models_src/utils.py ./odd_models_src/sql
 ENV POETRY_HOME=/etc/poetry \
     POETRY_VERSION=1.3.1
 ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
-ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
 
 RUN apt-get update && \
     apt-get install -y -q build-essential curl
 RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=${POETRY_HOME} python3 -
 
-RUN poetry config virtualenvs.create false
 RUN poetry config experimental.new-installer false
 
 # publishing package

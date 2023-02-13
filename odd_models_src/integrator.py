@@ -1,31 +1,35 @@
 from .api_client.open_data_discovery_ingestion_api import ODDApiClient
 from requests import Response
-from .models import DataEntityList, DataSet, MetadataExtension
+from .models import (
+    DataEntityList,
+    DataSet,
+    MetadataExtension,
+    DataSourceList,
+    DataSource,
+)
 from typing import List, Dict, Any
 
 
 class OddIntegrator:
+    source_name = "internal_host"
+    service_name = "internal_service"
+
     def __init__(self, odd_platform_url: str, odd_collector_token: str):
         self.odd_collector_token = odd_collector_token
         self.platform_client = ODDApiClient(base_url=odd_platform_url)
-
-    source_name = "internal_host"
-    service_name = "internal_service"
 
     @property
     def source_oddrn(self) -> str:
         return f"//{self.service_name}/{self.source_name}"
 
     def register_source(self) -> int:
-        reg_source_data = {
-            "items": [
-                {
-                    "oddrn": self.source_oddrn,
-                    "name": self.source_name,
-                    "description": None,
-                }
+        reg_source_data = DataSourceList(
+            items=[
+                DataSource(
+                    oddrn=self.source_oddrn, name=self.source_name, description=None
+                )
             ]
-        }
+        )
         reg_headers = {
             "content-type": "application/json",
             "Authorization": f"Bearer {self.odd_collector_token}",
