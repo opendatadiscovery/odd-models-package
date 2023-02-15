@@ -1,5 +1,6 @@
 from odd_models_src.sql_parser import SqlStatement
 
+
 def test_parse_ddl():
     statement = SqlStatement("SELECT price, hd, ram FROM pc")
     assert statement.inputs == ["pc"]

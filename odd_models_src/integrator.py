@@ -1,13 +1,15 @@
-from .api_client.open_data_discovery_ingestion_api import ODDApiClient
+from typing import Any, Dict, List
+
 from requests import Response
+
+from .api_client.open_data_discovery_ingestion_api import ODDApiClient
 from .models import (
     DataEntityList,
     DataSet,
-    MetadataExtension,
-    DataSourceList,
     DataSource,
+    DataSourceList,
+    MetadataExtension,
 )
-from typing import List, Dict, Any
 
 
 class OddIntegrator:
