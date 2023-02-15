@@ -29,8 +29,8 @@ def provide_token(method):
             raise EmptyTokenError()
 
         headers = kwargs.get("headers") or {}
-        headers.update("Authorization", f"Bearer {client._token}")
-        kwargs.update("headers", headers)
+        headers["Authorization"] = f"Bearer {client._token}"
+        kwargs["headers"] = headers
 
         return method(*args, **kwargs)
 
@@ -42,8 +42,8 @@ def with_header(name: str, value: str):
         @wraps(method)
         def wrapped(*args, **kwargs):
             headers = kwargs.get("headers") or {}
-            headers.update(name, value)
-            kwargs.update("headers", headers)
+            headers[name] = value
+            kwargs["headers"] = headers
             return method(*args, **kwargs)
 
         return wrapped
