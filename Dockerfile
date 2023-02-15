@@ -35,6 +35,7 @@ COPY --from=pydantic_generator /generated/models.py odd_models/models.py
 # copying necessary files for api client to package folder
 COPY --from=openapi_generator  /generated/odd_models/api_client/api odd_models/api_client
 COPY odd_models_src/api_client/http_client.py odd_models/api_client
+COPY odd_models_src/api_client/v2/ odd_models/api_client/v2/
 
 # copying another package files
 COPY ./pyproject.toml ./odd_models_src/README.md ./
