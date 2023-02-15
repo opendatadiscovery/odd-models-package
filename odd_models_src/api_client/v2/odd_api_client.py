@@ -112,7 +112,7 @@ class Client:
         data = DataSourceList(
             items=[DataSource(oddrn=data_source_oddrn, name=data_source_name)]
         )
-        response = self._client.create_data_source(data, headers)
+        response = self._client.create_data_source(data=data, headers=headers)
 
         try:
             response.raise_for_status()
