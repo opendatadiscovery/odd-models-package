@@ -58,13 +58,13 @@ class Client:
         self._host = host or os.getenv("ODD_PLATFORM_HOST", None)
         self._token = token or os.getenv("ODD_PLATFORM_TOKEN", None)
 
-        if host is None:
+        if self._host is None:
             raise EmptyHostError()
 
         self._client = ODDApiClient(self._host)
 
     def auth(self, *, name: str, description: Optional[str]) -> None:
-        token = self.create_token(name, description)
+        token = self.create_token(name=name, description=description)
         self._token = token
 
     def get_data_entities_by_deg_oddrn(self, oddrn: str) -> CompactDataEntityList:
