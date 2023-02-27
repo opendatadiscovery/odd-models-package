@@ -15,10 +15,10 @@ COPY ./opendatadiscovery-specification/specification /spec
 RUN pip install datamodel-code-generator==$GENERATTOR_VERSION
 RUN mkdir generated
 RUN datamodel-codegen \
-     --input /spec/entities.yaml \
-     --output generated/models.py \
-     --input-file-type openapi \
-     --target-python-version 3.9
+    --input /spec/entities.yaml \
+    --output generated/models.py \
+    --input-file-type openapi \
+    --target-python-version 3.9
 
 
 FROM python:3.9.1
@@ -45,7 +45,12 @@ COPY odd_models_src/api_client/v2/ odd_models/api_client/v2/
 
 # copying another package files
 COPY ./pyproject.toml ./odd_models_src/README.md ./
-COPY ./odd_models_src/__init__.py ./odd_models_src/utils.py ./odd_models_src/sql_parser.py ./odd_models_src/integrator.py odd_models/
+
+COPY ./odd_models_src/__init__.py \
+    ./odd_models_src/utils.py \ 
+    ./odd_models_src/sql_parser.py \
+    ./odd_models_src/logger.py \
+    ./odd_models_src/integrator.py odd_models/
 
 # installing poetry
 ENV POETRY_HOME=/etc/poetry \
