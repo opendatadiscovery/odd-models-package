@@ -14,7 +14,7 @@ include = ["LICENSE"]
 python = "^3.9"
 pydantic = "^1.9.1"
 sqlparse = "0.4.2"
-requests = "2.27.1"
+requests = "2.28.2"
 sql-metadata = "^2.6.0"
 loguru = "^0.6.0"
 
