@@ -20,6 +20,12 @@ RUN datamodel-codegen \
     --input-file-type openapi \
     --target-python-version 3.9
 
+RUN datamodel-codegen \
+    --input /spec/metrics.yaml \
+    --output generated/metrics.py \
+    --input-file-type openapi \
+    --target-python-version 3.9
+
 
 FROM python:3.9.1
 
@@ -35,8 +41,7 @@ ENV PYPI_PASSWORD=$PYPI_PASSWORD
 # collecting a package
 WORKDIR package
 
-# copying generated pydantic models
-COPY --from=pydantic_generator /generated/models.py odd_models/models.py
+
 
 # copying necessary files for api client to package folder
 COPY --from=openapi_generator  /generated/odd_models/api_client/api odd_models/api_client
@@ -50,7 +55,12 @@ COPY ./odd_models_src/__init__.py \
     ./odd_models_src/utils.py \ 
     ./odd_models_src/sql_parser.py \
     ./odd_models_src/logger.py \
-    ./odd_models_src/integrator.py odd_models/
+    ./odd_models_src/integrator.py \
+    ./odd_models_src/models/ odd_models/
+
+# copying generated pydantic models
+COPY --from=pydantic_generator /generated/models.py odd_models/models/models.py
+COPY --from=pydantic_generator /generated/metrics.py odd_models/models/metrics.py
 
 # installing poetry
 ENV POETRY_HOME=/etc/poetry \
