@@ -56,11 +56,12 @@ COPY ./odd_models_src/__init__.py \
     ./odd_models_src/sql_parser.py \
     ./odd_models_src/logger.py \
     ./odd_models_src/integrator.py \
-    ./odd_models_src/models/ odd_models/
+    ./odd_models_src/models odd_models/
 
 # copying generated pydantic models
 COPY --from=pydantic_generator /generated/models.py odd_models/models/models.py
 COPY --from=pydantic_generator /generated/metrics.py odd_models/models/metrics.py
+COPY ./odd_models_src/models/__init__.py odd_models/models/__init__.py
 
 # installing poetry
 ENV POETRY_HOME=/etc/poetry \
