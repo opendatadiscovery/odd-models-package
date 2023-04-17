@@ -84,3 +84,32 @@ with DataSource("//cloud/aws/dev") as data_source:
     data_source.add_data_asset(validation_lambda)
 ```
 
+# Development
+
+### Installation
+```bash
+# Install dependencies
+poetry install
+
+# Activate virtual environment
+poetry shell
+```
+
+### Generating models
+```bash
+# Generate models. Will generate models pydantic into odd_models/models
+make generate_models
+
+# Generate api client. Will generate api client into odd_models/api_client
+make generate_client
+```
+
+### Tests
+```bash
+pytest .
+```
+
+### Docker build
+```bash
+docker build -t odd-models .
+```
