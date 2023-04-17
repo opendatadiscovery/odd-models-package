@@ -1,5 +1,6 @@
 # generating pydantic models
 FROM openapitools/openapi-generator:cli-v5.0.1 AS openapi_generator
+
 COPY ./opendatadiscovery-specification/specification /spec
 COPY ./openapi_generator/api_client/api.mustache ./openapi_generator/api_client/__init__api.mustache /templates/api_client/
 RUN java -jar openapi-generator-cli.jar generate \
@@ -9,25 +10,27 @@ RUN java -jar openapi-generator-cli.jar generate \
     -t /templates/api_client \
     --additional-properties=packageName=odd_models.api_client
 
-FROM python:3.9.1 as pydantic_generator
+FROM python:3.9.16 as pydantic_generator
 ENV GENERATTOR_VERSION=0.14.1
+ENV TARGET_PYTHON_VERSION=3.9
 COPY ./opendatadiscovery-specification/specification /spec
 RUN pip install datamodel-code-generator==$GENERATTOR_VERSION
 RUN mkdir generated
+
 RUN datamodel-codegen \
     --input /spec/entities.yaml \
     --output generated/models.py \
     --input-file-type openapi \
-    --target-python-version 3.9
+    --target-python-version $TARGET_PYTHON_VERSION
 
 RUN datamodel-codegen \
     --input /spec/metrics.yaml \
     --output generated/metrics.py \
     --input-file-type openapi \
-    --target-python-version 3.9
+    --target-python-version $TARGET_PYTHON_VERSION
 
 
-FROM python:3.9.1
+FROM python:3.9.16
 
 ARG ODD_MODELS_VERSION
 ENV ODD_MODELS_VERSION=$ODD_MODELS_VERSION
@@ -39,29 +42,17 @@ ARG PYPI_PASSWORD
 ENV PYPI_PASSWORD=$PYPI_PASSWORD
 
 # collecting a package
-WORKDIR package
-
-
+WORKDIR odd-models
 
 # copying necessary files for api client to package folder
 COPY --from=openapi_generator  /generated/odd_models/api_client/api odd_models/api_client
-COPY odd_models_src/api_client/http_client.py odd_models/api_client
-COPY odd_models_src/api_client/v2/ odd_models/api_client/v2/
 
 # copying another package files
-COPY ./pyproject.toml ./odd_models_src/README.md ./
-
-COPY ./odd_models_src/__init__.py \
-    ./odd_models_src/utils.py \ 
-    ./odd_models_src/sql_parser.py \
-    ./odd_models_src/logger.py \
-    ./odd_models_src/integrator.py \
-    ./odd_models_src/models odd_models/
+COPY ./pyproject.toml README.md LICENSE ./
+COPY ./odd_models/ odd_models/
 
 # copying generated pydantic models
-COPY --from=pydantic_generator /generated/models.py odd_models/models/models.py
-COPY --from=pydantic_generator /generated/metrics.py odd_models/models/metrics.py
-COPY ./odd_models_src/models/__init__.py odd_models/models/__init__.py
+COPY --from=pydantic_generator /generated/ odd_models/models/
 
 # installing poetry
 ENV POETRY_HOME=/etc/poetry \
@@ -83,3 +74,4 @@ RUN poetry build
 
 # for real PyPI index
 RUN poetry publish --username $PYPI_USERNAME --password $PYPI_PASSWORD
+
