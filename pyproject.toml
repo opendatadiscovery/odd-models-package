@@ -18,7 +18,7 @@ requests = "2.28.2"
 sql-metadata = "^2.6.0"
 loguru = "^0.6.0"
 oddrn-generator = "^0.1.75"
-funcy = "^2.0"
+funcy = "1.7.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.1"
