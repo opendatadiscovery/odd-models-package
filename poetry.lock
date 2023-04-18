@@ -351,13 +351,14 @@ testing = ["covdefaults (>=2.3)", "coverage (>=7.2.2)", "diff-cover (>=7.5)", "p
 
 [[package]]
 name = "funcy"
-version = "1.7"
+version = "2.0"
 description = "A fancy and practical functional tools"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "funcy-1.7.tar.gz", hash = "sha256:20e384452d7c11a21a55b66c940290189ef2dcfe08b284aecb270e233ba7ec2d"},
+    {file = "funcy-2.0-py2.py3-none-any.whl", hash = "sha256:53df23c8bb1651b12f095df764bfb057935d49537a56de211b098f4c79614bb0"},
+    {file = "funcy-2.0.tar.gz", hash = "sha256:3963315d59d41c6f30c04bc910e10ab50a3ac4a225868bfa96feed133df075cb"},
 ]
 
 [[package]]
@@ -1326,4 +1327,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "17c522b47ee530c11b37989fa35a50f896cb23981c178ffb4bb8801e78cb0cc3"
+content-hash = "53cd5cf1fc672e96c7008be973726b2f870abac26d8e808431946e56c6ec7cab"
