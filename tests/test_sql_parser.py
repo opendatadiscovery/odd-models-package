@@ -1,4 +1,4 @@
-from odd_models_src.sql_parser import SqlStatement
+from odd_models.sql_parser import SqlStatement
 
 
 def test_parse_ddl():
