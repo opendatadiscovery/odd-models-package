@@ -1,2 +1,21 @@
-models/models.py
-models/entities.py
+.git/
+
+build
+dist
+*.egg-info
+*.egg/
+*.pyc
+*.swp
+
+.tox
+.coverage
+html/*
+**/__pycache__
+
+# Compiled Documentation
+docs/_build
+
+odd_models/__pycache__
+odd_models/models/models.py
+odd_models/models/metrics.py
+odd_models/api_client/open_data_discovery_ingestion_api.py

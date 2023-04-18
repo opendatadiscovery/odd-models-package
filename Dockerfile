@@ -30,7 +30,7 @@ RUN datamodel-codegen \
     --target-python-version $TARGET_PYTHON_VERSION
 
 
-FROM python:3.9.16
+FROM python:3.9.16 as builder
 
 ARG ODD_MODELS_VERSION
 ENV ODD_MODELS_VERSION=$ODD_MODELS_VERSION
@@ -41,37 +41,28 @@ ENV PYPI_USERNAME=$PYPI_USERNAME
 ARG PYPI_PASSWORD
 ENV PYPI_PASSWORD=$PYPI_PASSWORD
 
-# collecting a package
-WORKDIR odd-models
-
-# copying necessary files for api client to package folder
-COPY --from=openapi_generator  /generated/odd_models/api_client/api odd_models/api_client
-
-# copying another package files
-COPY ./pyproject.toml README.md LICENSE ./
-COPY ./odd_models/ odd_models/
-
-# copying generated pydantic models
-COPY --from=pydantic_generator /generated/ odd_models/models/
-
-# installing poetry
 ENV POETRY_HOME=/etc/poetry \
     POETRY_VERSION=1.3.1
 ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
 
+# collecting a package
+WORKDIR odd-models
 RUN apt-get update && \
     apt-get install -y -q build-essential curl
 RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=${POETRY_HOME} python3 -
-
 RUN poetry config experimental.new-installer false
+
+COPY pyproject.toml poetry.lock ./
+
+COPY LICENSE README.md ./
+COPY ./odd_models ./odd_models
+
+# copying generated assets
+COPY --from=pydantic_generator /generated/ odd_models/models/
+COPY --from=openapi_generator  /generated/odd_models/api_client/api odd_models/api_client
 
 # publishing package
 RUN poetry build
 
-# for test PyPI index (local development)
-# RUN poetry config repositories.testpypi https://test.pypi.org/legacy/
-# RUN poetry publish --repository testpypi --username $PYPI_USERNAME --password $PYPI_PASSWORD
-
 # for real PyPI index
 RUN poetry publish --username $PYPI_USERNAME --password $PYPI_PASSWORD
-
