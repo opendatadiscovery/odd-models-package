@@ -1,6 +1,5 @@
+from odd_models.discovery.data_assets.data_asset import DataAsset
 from odd_models.models import DataEntity
-
-from .data_asset import DataAsset
 
 
 class Database(DataAsset):

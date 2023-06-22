@@ -1,7 +1,7 @@
 from collections import UserList
 
-from ..helper import link_nodes
-from .data_asset import HasUpstream
+from odd_models.discovery.data_assets.data_asset import HasUpstream
+from odd_models.discovery.helper import link_nodes
 
 
 class DataAssetsList(UserList):

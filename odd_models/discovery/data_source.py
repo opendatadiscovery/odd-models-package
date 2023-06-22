@@ -1,6 +1,5 @@
-from discovery.data_assets.data_asset import MappableToDataEntity
-
 from odd_models.api_client.v2.odd_api_client import Client
+from odd_models.discovery.data_assets.data_asset import MappableToDataEntity
 from odd_models.models.models import DataEntity, DataEntityList
 
 
