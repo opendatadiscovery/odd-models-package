@@ -1,6 +1,6 @@
 from typing import Protocol, runtime_checkable
 
-from models import DataEntity
+from odd_models.models import DataEntity
 
 
 class DataAsset(Protocol):
