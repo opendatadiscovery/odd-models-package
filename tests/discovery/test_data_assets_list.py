@@ -1,6 +1,4 @@
-from discovery.data_assets import S3Artifact
-
-from odd_models.discovery.data_assets import AWSLambda
+from odd_models.discovery.data_assets import AWSLambda, S3Artifact
 from odd_models.discovery.data_assets.data_asset_list import DataAssetsList
 
 
