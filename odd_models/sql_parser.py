@@ -7,12 +7,10 @@ DDL = {QueryType.CREATE, QueryType.DROP, QueryType.ALTER, QueryType.SELECT}
 DML = {QueryType.INSERT, QueryType.UPDATE, QueryType.DELETE}
 
 
-class ParseSqlError(Exception):
-    ...
+class ParseSqlError(Exception): ...
 
 
-class UnsupportedQueryType(ParseSqlError):
-    ...
+class UnsupportedQueryType(ParseSqlError): ...
 
 
 class SqlStatement:
