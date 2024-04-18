@@ -12,8 +12,7 @@ class DataAsset(Protocol):
 class MappableToDataEntity(DataAsset, Protocol):
     """A DataAsset that can be mapped to a DataEntity"""
 
-    def to_data_entity(self) -> DataEntity:
-        ...
+    def to_data_entity(self) -> DataEntity: ...
 
 
 @runtime_checkable
@@ -45,5 +44,4 @@ class Transformer(HasUpstream, HasDownstream, Protocol):
 class Upstream(Protocol):
     """A DataAsset that is upstream of other DataAssets"""
 
-    def __rshift__(self, other: HasUpstream) -> HasUpstream:
-        ...
+    def __rshift__(self, other: HasUpstream) -> HasUpstream: ...

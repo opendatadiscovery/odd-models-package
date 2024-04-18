@@ -7,6 +7,7 @@ database - DataEntity object for a database. Database has data_entity_group with
 table - DataEntity object for a table
 view - DataEntity object for a view which connected to the table
 """
+
 from oddrn_generator import PostgresqlGenerator
 
 from odd_models.models import (
