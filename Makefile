@@ -2,9 +2,9 @@
 generate_models: generate_entities generate_metrics
 
 generate_entities:
-	datamodel-codegen --input ./opendatadiscovery-specification/specification/entities.yaml --output odd_models/models/models.py --input-file-type openapi
+	datamodel-codegen --input ./opendatadiscovery-specification/specification/entities.yaml --output odd_models/models/models.py --input-file-type openapi --output-model-type pydantic_v2.BaseModel
 generate_metrics:
-	datamodel-codegen --input ./opendatadiscovery-specification/specification/metrics.yaml --output odd_models/models/metrics.py --input-file-type openapi
+	datamodel-codegen --input ./opendatadiscovery-specification/specification/metrics.yaml --output odd_models/models/metrics.py --input-file-type openapi --output-model-type pydantic_v2.BaseModel
 generate_client:
 	docker run \
 			--rm \
