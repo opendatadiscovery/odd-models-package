@@ -11,7 +11,7 @@ RUN java -jar openapi-generator-cli.jar generate \
     --additional-properties=packageName=odd_models.api_client
 
 FROM python:3.9.16 as pydantic_generator
-ENV GENERATTOR_VERSION=0.25.2
+ENV GENERATTOR_VERSION=0.25.5
 ENV TARGET_PYTHON_VERSION=3.9
 COPY ./opendatadiscovery-specification/specification /spec
 RUN pip install datamodel-code-generator==$GENERATTOR_VERSION
@@ -21,12 +21,14 @@ RUN datamodel-codegen \
     --input /spec/entities.yaml \
     --output generated/models.py \
     --input-file-type openapi \
+    --output-model-type pydantic_v2.BaseModel \
     --target-python-version $TARGET_PYTHON_VERSION
 
 RUN datamodel-codegen \
     --input /spec/metrics.yaml \
     --output generated/metrics.py \
     --input-file-type openapi \
+    --output-model-type pydantic_v2.BaseModel \
     --target-python-version $TARGET_PYTHON_VERSION
 
 
